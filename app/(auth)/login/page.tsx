@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SignInForm } from "@/app/(auth)/sign-in/components/SignInForm";
+import { SignInForm } from "@/app/(auth)/login/components/SignInForm";
 import { SignUpForm } from "./components/SignUpForm";
 
 export default function SignInPage () {

@@ -2,18 +2,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/use-toast";
+import { signIn } from "next-auth/react";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
 import {
   Form,
   FormControl,
@@ -22,53 +23,50 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-  password: z.string().min(2).max(50),
+  email: z.string().min(2, { message: "Email is required." }).max(50).email(),
+  password: z.string().min(2, {message: "Password is required."}).max(50),
 });
 
-export function SignUpForm() {
+export function SignInForm() {
   const router = useRouter();
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
   });
 
+  // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(values),
+    const response = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
     });
-    
-    if (response.status === 200) {
+
+    if (response?.status === 200) {
       toast({
-        title: "Your registration has been successful.",
+        title: "login successful",
       });
-      router.push("/sign-in");
+      router.push("/");
     } else {
       toast({
-        title: "Error registering",
+        title: "Login failed, please check credentials.",
         variant: "destructive",
       });
     }
   };
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
-        <CardDescription>Signing up is very easy.</CardDescription>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Access all features</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <Form {...form}>
@@ -76,20 +74,6 @@ export function SignUpForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-3 w-full text-black"
           >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John Fisher" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="email"
@@ -109,7 +93,7 @@ export function SignUpForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input placeholder="Shhh..." type="password" {...field} />
                   </FormControl>
@@ -119,7 +103,7 @@ export function SignUpForm() {
             />
 
             <Button type="submit" className="w-full">
-              Sign Up
+              Sing In
             </Button>
           </form>
         </Form>

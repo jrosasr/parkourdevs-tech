@@ -12,51 +12,53 @@ declare module "next-auth" {
   }
 }
 
+export type CredentialsProp = {
+  email: string;
+  password: string;
+};
+
 const handler = NextAuth({
   session: {
-      strategy: "jwt"
+    strategy: "jwt",
   },
   pages: {
-      signIn: "/login"
+    signIn: "/login",
   },
   providers: [
-      CredentialsProvider({
-          name: "credentials",
-          credentials: {
-              email: { label: "Email", type: "text" },
-              password: { label: "Password", type: "password" }
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials: CredentialsProp) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Invalid credentials");
+        }
+
+        const user = await db.user.findUnique({
+          where: {
+            email: credentials.email,
           },
-          async authorize(credentials: {
-              email: string;
-              password: string
-          }) {
-              if (!credentials?.email || !credentials?.password) {
-                  throw new Error("Invalid credentials");
-              }
+        });
 
-              const user = await db.user.findUnique({
-                  where: {
-                      email: credentials.email
-                  }
-              });
+        if (!user || !user?.password) {
+          throw new Error("Invalid credentials");
+        }
 
-              if (!user || !user?.password) {
-                  throw new Error("Invalid credentials");
-              }
+        const IsCorrectPassword = await compare(
+          credentials.password,
+          user.password
+        );
 
-              const IsCorrectPassword = await compare(
-                  credentials.password,
-                  user.password
-              );
+        if (!IsCorrectPassword) {
+          throw new Error("Invalid credentials");
+        }
 
-              if (!IsCorrectPassword) {
-                  throw new Error("Invalid credentials");
-              }
+        return user;
+      },
+    }),
+  ],
+});
 
-              return user
-          }
-      })
-  ]
-})
-
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };
