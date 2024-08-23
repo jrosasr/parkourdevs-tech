@@ -1,21 +1,41 @@
-// "use client";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { TableDataInformation } from "../components/TableDataInformation";
+import { ButtonAddInformation } from "../components/ButtonAddInformation";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import { MountainSnow } from "lucide-react";
-import { TableDataInformation } from "../../components/TableDataInformation";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+export default async function DashboardPage() {
+  const session = await getServerSession();
 
-export default function LandingPage() {
+  if (!session || !session.user?.email) {
+    redirect("/");
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      email: session?.user.email,
+    },
+    include: {
+      peopleInformation: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  if (!user || !user.peopleInformation) {
+    redirect("/");
+  }
+
   return (
-    <>
-      asd
-    </>
-  );
-}
+      <div className="space-y-4 w-full">
+        <div className="flex justify-between">
+          <h1 className="font-semibold text-xl">Personal information</h1>
+          <ButtonAddInformation userId={user.id} />
+        </div>
 
-function MountainIcon(props: any) {
-  return <MountainSnow className="mx-auto w-7 h-7" />;
+        <TableDataInformation data={user.peopleInformation} />
+      </div>
+  );
 }

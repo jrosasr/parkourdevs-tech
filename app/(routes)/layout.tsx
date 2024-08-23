@@ -9,8 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import Logout from "@/components/Shared/Logout/Logout";
+import { Input } from "@/components/ui/input";
 
 export default function LayoutRoutes({
   children,
@@ -59,15 +67,64 @@ export default function LayoutRoutes({
             Settings
           </Link>
         </nav>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="md:hidden shrink-0"
+            >
+              <Menu className="w-5 h-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <nav className="gap-6 grid font-medium text-lg">
+              <Link
+                href="#"
+                className="flex items-center gap-2 font-semibold text-lg"
+              >
+                <Package2 className="w-6 h-6" />
+                <span className="sr-only">Acme Inc</span>
+              </Link>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Orders
+              </Link>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Products
+              </Link>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Customers
+              </Link>
+              <Link href="#" className="hover:text-foreground">
+                Settings
+              </Link>
+            </nav>
+          </SheetContent>
+        </Sheet>
         <div className="flex items-center gap-4 md:gap-2 lg:gap-4 md:ml-auto w-full">
-          <form className="sm:flex-initial flex-1 ml-auto">
+        <form className="sm:flex-initial flex-1 ml-auto">
             <div className="relative">
-              <Search className="top-2.5 left-2.5 absolute w-4 h-4 text-muted-foreground" />
-              <Input
+              {/* <Input
                 type="search"
                 placeholder="Search products..."
                 className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
+              /> */}
             </div>
           </form>
           <DropdownMenu>
