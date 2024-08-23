@@ -1,23 +1,29 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SignInForm } from "@/app/(auth)/sign-in/components/SignInForm";
+import { SignUpForm } from "./components/SignUpForm";
 
-const Page = () => {
+export default function SignInPage () {
   return (
-    <main className="bg-popover max-w-lg mx-auto my-4 rounded-lg p-10">
-      <h1 className="text-2xl font-bold text-center">
-        Sign in to your account
-      </h1>
-      <div className="mt-4">
-        <button
-          onClick={() => signIn(undefined, { callbackUrl: "/dashboard" })}
-          className="w-full bg-primary text-primary-foreground text-center hover:opacity-90 font-medium px-4 py-2 rounded-lg block"
-        >
-          Sign In
-        </button>
-      </div>
-    </main>
+    <div className="flex justify-center">
+      <main className="bg-popover my-4 p-10 rounded-lg max-w-lg">
+        <h1 className="font-bold text-3xl text-center">Welcome</h1>
+        <div className="mt-4">
+          <Tabs defaultValue="signIn" className="w-[400px]">
+            <TabsList className="grid grid-cols-2 w-full">
+              <TabsTrigger value="signIn">Sign In</TabsTrigger>
+              <TabsTrigger value="signUp">Sign Up</TabsTrigger>
+            </TabsList>
+            <TabsContent value="signIn">
+              <SignInForm />
+            </TabsContent>
+            <TabsContent value="signUp">
+              <SignUpForm />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+    </div>
   );
 };
-
-export default Page;
