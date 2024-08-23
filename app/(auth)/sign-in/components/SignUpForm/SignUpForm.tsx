@@ -46,26 +46,22 @@ export function SignUpForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    toast({
-      title: "Your registration has been successful.",
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(values),
     });
-    // const response = await fetch("/api/auth/register", {
-    //   method: "POST",
-    //   body: JSON.stringify(values),
-    // });
-    // console.log(response.status);
     
-    // if (response.status === 200) {
-    //   toast({
-    //     title: "Your registration has been successful.",
-    //   });
-    //   // router.push("/");
-    // } else {
-    //   toast({
-    //     title: "Error registering",
-    //     variant: "destructive",
-    //   });
-    // }
+    if (response.status === 200) {
+      toast({
+        title: "Your registration has been successful.",
+      });
+      router.push("/sign-in");
+    } else {
+      toast({
+        title: "Error registering",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
