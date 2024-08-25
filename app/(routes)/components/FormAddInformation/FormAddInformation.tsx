@@ -2,6 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 import {
   Form,
@@ -15,18 +16,22 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { PhoneInput } from "@/components/Shared/PhoneInput";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   dni: z.string().min(2).max(15),
-  phone: z.string().min(2).max(50),
+  phone: z
+  .string()
+  .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+  .or(z.literal("")),
   address: z.string().min(2).max(200),
-  salary: z.number(),
+  salary: z.string(),
   userId: z.number(),
 });
 export function FormAddInformation(props: { userId: number }) {
   const { userId } = props;
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,15 +39,12 @@ export function FormAddInformation(props: { userId: number }) {
       dni: "",
       phone: "",
       address: "",
-      salary: 0,
+      salary: '',
       userId: userId,
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
   }
   return (
@@ -83,7 +85,7 @@ export function FormAddInformation(props: { userId: number }) {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input placeholder="Phone" {...field} />
+                <PhoneInput focusInputOnCountrySelection {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

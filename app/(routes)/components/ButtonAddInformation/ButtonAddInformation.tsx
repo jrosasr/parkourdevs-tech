@@ -19,12 +19,9 @@ export async function ButtonAddInformation(props: { userId: number }) {
       <DialogTrigger asChild>
         <Button>Add</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:w-auto h-[90vh] overflow-auto">
         <DialogHeader>
           <DialogTitle>Register information</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
-          </DialogDescription>
         </DialogHeader>
         <div className="flex gap-4 py-4">
           <FormAddInformation userId={userId} />
