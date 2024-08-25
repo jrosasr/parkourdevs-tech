@@ -31,7 +31,7 @@ export default async function DashboardPage() {
   return (
       <div className="space-y-4 w-full">
         <div className="flex justify-between">
-          <h1 className="font-semibold text-xl">Personal information</h1>
+          <h1 className="flex items-center font-semibold text-xl">Personal information</h1>
           <ButtonAddInformation userId={user.id} />
         </div>
 
