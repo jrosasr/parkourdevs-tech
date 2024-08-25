@@ -42,30 +42,6 @@ export default function LayoutRoutes({
           >
             Dashboard
           </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Orders
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Products
-          </Link>
-          <Link
-            href="#"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Customers
-          </Link>
-          <Link
-            href="#"
-            className="text-foreground hover:text-foreground transition-colors"
-          >
-            Settings
-          </Link>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -92,27 +68,6 @@ export default function LayoutRoutes({
                 className="text-muted-foreground hover:text-foreground"
               >
                 Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </Link>
-              <Link href="#" className="hover:text-foreground">
-                Settings
               </Link>
             </nav>
           </SheetContent>
