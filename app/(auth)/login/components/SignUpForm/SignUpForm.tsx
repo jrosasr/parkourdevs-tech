@@ -54,7 +54,7 @@ export function SignUpForm() {
       toast({
         title: "Your registration has been successful.",
       });
-      router.push("/sign-in");
+      router.push("/login");
     } else {
       toast({
         title: "Error registering",
