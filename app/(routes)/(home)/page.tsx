@@ -31,10 +31,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="gap-4 w-full">
-      <div className="h-[300px]">
+      {/* <div className="h-[300px]">
         <ChartSalarialTendency data={user.peopleInformation} />
-      </div>
-      <div className="space-y-4 mt-32">
+      </div> */}
+      <div className="space-y-4">
         <div className="flex justify-between">
           <h1 className="flex items-center font-semibold text-xl">
             Personal information
