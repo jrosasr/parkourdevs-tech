@@ -132,8 +132,8 @@ export function ChartSalarialTendency(props: TableDataInformationProps) {
   const { data } = props
   const [timeRange, setTimeRange] = React.useState("90d")
 
-  function groupAndCountByDate(records) {
-    const gruposPorFecha = records.reduce((groups, elem) => {
+  function groupAndCountByDate(records: PersonalInformation[]) {
+    const gruposPorFecha = records.reduce((groups: any, elem) => {
       const { date } = elem;
       const formatDate = formatDateTimeToString(date);
   
@@ -149,21 +149,21 @@ export function ChartSalarialTendency(props: TableDataInformationProps) {
     return Object.values(gruposPorFecha);
   }
 
-  function formatDateTimeToString(date: Date) {
-    const formatDate = date
-      .toLocaleString("en-US", {
+  function formatDateTimeToString(date: Date | null) {
+    const formatDate = date?.toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
       })
       .replace(/\//g, "-").split("-");
     
-    return `${formatDate[2]}-${formatDate[0]}-${formatDate[1]}`;
+    return `${formatDate?.[2]}-${formatDate?.[0]}-${formatDate?.[1]}`;
   }
   
   const filteredData = groupAndCountByDate(data).filter((item) => {
-    const date = new Date(item.date);
+    // const date = new Date(item?.date);
     
+    const date = new Date()
     const now = new Date()
 
     now.setDate(now.getDate() - 365)
