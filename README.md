@@ -99,5 +99,5 @@ npm run dev
 2. Correos transaccionales:
 - 🕓 Validar el correo que el usuario usa para registrarse enviándole un link de verificación, implementar Resend y react-email.
 
-3. Grafico
-- 🕓 Usando el punto aterior crear una grafica que muetre la tendencia de los salarios
+3. Gráfico
+- 🕓 Usando el punto anterior crear una gráfica que muestra la tendencia de los salarios
