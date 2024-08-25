@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PhoneInput } from "@/components/Shared/PhoneInput";
 import { toast } from "@/components/ui/use-toast";
+import { ChangeEvent } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required field."}).max(50, { message: "Max 50 characters." }),
@@ -62,7 +63,7 @@ export function FormAddInformation(props: { userId: number, closeDialog: () => v
     })
   }
 
-  const handleAmountChange = (e) => {
+  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const numericValue = value.replace(/[^0-9.]/g, "")
     let formattedValue = formatAmount(numericValue)
@@ -91,7 +92,7 @@ export function FormAddInformation(props: { userId: number, closeDialog: () => v
     return formattedValue
   }
 
-  const handleCedulaChange = (e) => {
+  const handleCedulaChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "")
     if (value.length > 8) {
       value = value.slice(0, 8)
