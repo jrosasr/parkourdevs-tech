@@ -1,3 +1,4 @@
+'use client'
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
@@ -11,11 +12,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FormAddInformation } from "../FormAddInformation";
+import { useState } from "react";
 
 export async function ButtonAddInformation(props: { userId: number }) {
   const { userId } = props;
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const closeDialog = () => {
+    setOpenDialog(false);
+}
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button>Add</Button>
       </DialogTrigger>
@@ -24,7 +31,7 @@ export async function ButtonAddInformation(props: { userId: number }) {
           <DialogTitle>Register information</DialogTitle>
         </DialogHeader>
         <div className="flex gap-4 py-4">
-          <FormAddInformation userId={userId} />
+          <FormAddInformation userId={userId} closeDialog={closeDialog} />
         </div>
       </DialogContent>
     </Dialog>

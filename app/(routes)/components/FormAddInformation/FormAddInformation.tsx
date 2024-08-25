@@ -1,8 +1,8 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -12,25 +12,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import axios from "axios";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PhoneInput } from "@/components/Shared/PhoneInput";
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  dni: z.string().min(2).max(15),
+  name: z.string().min(1, { message: "Name is required field."}).max(50, { message: "Max 50 characters." }),
+  dni: z.string().min(10, { message: "Invalid DNI"}).max(10, { message: "Invalid DNI" }),
   phone: z
   .string()
+  .min(1, { message: "Invalid phone number" })
   .refine(isValidPhoneNumber, { message: "Invalid phone number" })
   .or(z.literal("")),
-  address: z.string().min(2).max(200),
+  address: z.string().min(1, { message: "Address is required field."}).max(200, { message: "Max 200 characters."}),
   salary: z.string().min(1, { message: "The amount is required"}).max(8, { message: "The amount cannot be greater than 8 figures" }),
   userId: z.number(),
 });
-export function FormAddInformation(props: { userId: number }) {
-  const { userId } = props;
+export function FormAddInformation(props: { userId: number, closeDialog: () => void }) {
+  const { userId, closeDialog } = props;
+  const router = useRouter();
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,6 +51,15 @@ export function FormAddInformation(props: { userId: number }) {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    axios.post("/api/information", values).then((res) => {
+      console.log(res);
+      toast({
+        title: "Information added",
+      })
+      form.reset()
+      router.refresh();
+      closeDialog();
+    })
   }
 
   const handleAmountChange = (e) => {
@@ -115,7 +129,7 @@ export function FormAddInformation(props: { userId: number }) {
                   {...field}
                   onChange={handleCedulaChange}
                   placeholder="12.345.678"
-                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="border-gray-300 px-4 py-2 border focus:border-transparent rounded-md focus:ring-2 focus:ring-primary w-full focus:outline-none"
                   maxLength={10}
                 />
               </FormControl>
@@ -161,7 +175,7 @@ export function FormAddInformation(props: { userId: number }) {
               <FormControl>
                 {/* <Input type="number" min={0} placeholder="0" {...field} /> */}
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <div className="left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none">
                     <span className="text-muted-foreground">$</span>
                   </div>
                   <Input
