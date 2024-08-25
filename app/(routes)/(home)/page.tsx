@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { TableDataInformation } from "../components/TableDataInformation";
 import { ButtonAddInformation } from "../components/ButtonAddInformation";
+import { ChartSalarialTendency } from "../components/ChartSalarialTendency/ChartSalarialTendency";
 
 export default async function DashboardPage() {
   const session = await getServerSession();
@@ -29,13 +30,19 @@ export default async function DashboardPage() {
   }
 
   return (
-      <div className="space-y-4 w-full">
+    <div className="gap-4 w-full">
+      <div className="h-[300px]">
+        <ChartSalarialTendency data={user.peopleInformation} />
+      </div>
+      <div className="space-y-4 mt-32">
         <div className="flex justify-between">
-          <h1 className="flex items-center font-semibold text-xl">Personal information</h1>
+          <h1 className="flex items-center font-semibold text-xl">
+            Personal information
+          </h1>
           <ButtonAddInformation userId={user.id} />
         </div>
-
         <TableDataInformation data={user.peopleInformation} />
       </div>
+    </div>
   );
 }

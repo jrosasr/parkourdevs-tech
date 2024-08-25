@@ -51,9 +51,7 @@ export function FormAddInformation(props: { userId: number, closeDialog: () => v
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     axios.post("/api/information", values).then((res) => {
-      console.log(res);
       toast({
         title: "Information added",
       })

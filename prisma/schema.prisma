@@ -25,13 +25,14 @@ model User {
 }
 
 model PersonalInformation {
-  id      Int     @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   name    String?
   dni     Int
   phone   String
   address String
   salary  Float
   userId  Int
+  date    DateTime?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

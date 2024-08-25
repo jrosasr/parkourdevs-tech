@@ -8,7 +8,6 @@ export type TableDataInformationProps = {
 
 export async function TableDataInformation(props: TableDataInformationProps) {
     const { data } = props
-    console.log(data);
     
     return (
         <div className="w-full">

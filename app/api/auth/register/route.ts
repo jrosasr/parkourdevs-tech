@@ -10,7 +10,6 @@ export async function POST(req: Request) {
         if (!email || !password || !username) {
             return new NextResponse('Missing required fields', { status: 400 })
         }
-        console.log(email, password, username);
         
         const user = await db.user.create({
             data: {
