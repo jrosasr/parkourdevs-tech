@@ -31,6 +31,7 @@ const handler = NextAuth({
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+      //@ts-ignore
       async authorize(credentials: CredentialsProp) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");

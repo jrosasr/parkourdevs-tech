@@ -52,11 +52,12 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
            *
            * @param {E164Number | undefined} value - The entered value
            */
+          //@ts-ignore
           onChange={(value) => onChange?.(value || "")}
           {...props}
         />
       );
-    },
+    }
   );
 PhoneInput.displayName = "PhoneInput";
 
@@ -67,7 +68,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
       {...props}
       ref={ref}
     />
-  ),
+  )
 );
 InputComponent.displayName = "InputComponent";
 
@@ -90,7 +91,7 @@ const CountrySelect = ({
     (country: RPNInput.Country) => {
       onChange(country);
     },
-    [onChange],
+    [onChange]
   );
 
   return (
@@ -106,12 +107,12 @@ const CountrySelect = ({
           <ChevronsUpDown
             className={cn(
               "-mr-2 h-4 w-4 opacity-50",
-              disabled ? "hidden" : "opacity-100",
+              disabled ? "hidden" : "opacity-100"
             )}
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className="p-0 w-[300px]">
         <Command>
           <CommandList>
             <ScrollArea className="h-72">
@@ -139,7 +140,7 @@ const CountrySelect = ({
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          option.value === value ? "opacity-100" : "opacity-0",
+                          option.value === value ? "opacity-100" : "opacity-0"
                         )}
                       />
                     </CommandItem>
@@ -157,7 +158,7 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
 
   return (
-    <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm">
+    <span className="flex bg-foreground/20 rounded-sm w-6 h-4 overflow-hidden">
       {Flag && <Flag title={countryName} />}
     </span>
   );
