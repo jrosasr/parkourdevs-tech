@@ -24,11 +24,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
-  username: z.string().min(2, { message: "Username is required field." }).max(50),
-  email: z.string().min(2, { message: "Email is required field." }).max(50).email(),
-  password: z.string().min(2, { message: "The password is a mandatory field, it must be at least 8 long." }).max(50),
+  username: z
+    .string()
+    .min(2, { message: "Username is required field." })
+    .max(50),
+  email: z
+    .string()
+    .min(2, { message: "Email is required field." })
+    .max(50)
+    .email(),
+  password: z
+    .string()
+    .min(2, {
+      message: "The password is a mandatory field, it must be at least 8 long.",
+    })
+    .max(50),
 });
 
 export function SignUpForm() {
@@ -44,20 +57,43 @@ export function SignUpForm() {
     },
   });
 
+  async function login(values: z.infer<typeof formSchema>) {
+    const response = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (response?.status === 200) {
+      toast({
+        title: "login successful",
+      });
+      router.push("/");
+    } else {
+      toast({
+        title: "Login failed, please check credentials.",
+        variant: "destructive",
+      });
+    }
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify(values),
     });
-    
+
     if (response.status === 200) {
       toast({
         title: "Your registration has been successful.",
       });
-      router.push("/login");
+
+      await login(values);
     } else {
+      const data = await response.json();
+
       toast({
-        title: "Error registering",
+        title: data.error,
         variant: "destructive",
       });
     }

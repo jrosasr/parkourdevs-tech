@@ -4,23 +4,36 @@ import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
     try {
-        const { email, password, username } = await req.json()
-        const hashedPassword = await hash(password, 10)
+      const { email, password, username } = await req.json();
+      const hashedPassword = await hash(password, 10);
 
-        if (!email || !password || !username) {
-            return new NextResponse('Missing required fields', { status: 400 })
-        }
-        
-        const user = await db.user.create({
-            data: {
-                email,
-                password: hashedPassword,
-                username
-            }
-        })
+      if (!email || !password || !username) {
+        return new NextResponse("Missing required fields", { status: 400 });
+      }
 
-        return NextResponse.json(user)
+      const exists = await db.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (exists) {
+        return NextResponse.json(
+          { error: "User already exists" },
+          { status: 500 }
+        );
+      }
+
+      const user = await db.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          username,
+        },
+      });
+
+      return NextResponse.json(user);
     } catch (error) {
-        return new NextResponse('Internal Error', { status: 500 })
+        return NextResponse.json({ error: "Internal Error" }, { status: 500 });
     }
 }
